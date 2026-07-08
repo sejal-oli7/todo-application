@@ -1,239 +1,276 @@
-let todos = JSON.parse(localStorage.getItem("todos")) || [];
+// ===============================
+// Professional Todo Application
+// ===============================
 
-let editIndex = -1;
+// Load todos from localStorage or start fresh
+let todos = JSON.parse(localStorage.getItem('todos')) || [];
 
-// Display Tasks
-function displayTodos(list = todos) {
+// Track which todo is currently being edited (null = adding new)
+let editingId = null;
 
-    const todoList = document.getElementById("todoList");
+// DOM references
+const todoInput   = document.getElementById('todoInput');
+const categoryInput = document.getElementById('category');
+const priorityInput = document.getElementById('priority');
+const statusInput   = document.getElementById('status');
+const startDateInput = document.getElementById('startDate');
+const endDateInput   = document.getElementById('endDate');
+const todoList = document.getElementById('todoList');
+const searchInput = document.getElementById('searchTask');
+const addBtn = document.querySelector('.input-box button');
 
-    todoList.innerHTML = "";
+const totalTasksEl = document.getElementById('totalTasks');
+const pendingTasksEl = document.getElementById('pendingTasks');
+const completedTasksEl = document.getElementById('completedTasks');
 
-    list.forEach((todo, index) => {
+const modal = document.getElementById('modal');
+const todoDetails = document.getElementById('todoDetails');
 
-        todoList.innerHTML += `
-            <li>
-                <div class="todo-card">
-
-                    <h3>${todo.title}</h3>
-
-                    <p><strong>Category:</strong> ${todo.category}</p>
-
-                    <p><strong>Priority:</strong> ${todo.priority}</p>
-
-                    <p><strong>Status:</strong> ${todo.status}</p>
-
-                    <p><strong>Start:</strong> ${todo.startDate}</p>
-
-                    <p><strong>End:</strong> ${todo.endDate}</p>
-
-                    <div class="actions">
-
-                        <button class="view" onclick="viewTodo(${index})">
-                            View
-                        </button>
-
-                        <button class="edit" onclick="editTodo(${index})">
-                            Edit
-                        </button>
-
-                        <button class="delete" onclick="deleteTodo(${index})">
-                            Delete
-                        </button>
-
-                    </div>
-
-                </div>
-            </li>
-        `;
-
-    });
-
-    updateStats();
-
-    localStorage.setItem("todos", JSON.stringify(todos));
-
+// ===============================
+// Utility: generate a unique ID
+// ===============================
+function generateId() {
+    return 'id-' + Date.now() + '-' + Math.floor(Math.random() * 100000);
 }
 
-// Add / Update Task
+// ===============================
+// Save to localStorage
+// ===============================
+function saveTodos() {
+    localStorage.setItem('todos', JSON.stringify(todos));
+}
+
+// ===============================
+// Add or Update a Task
+// ===============================
 function addTodo() {
+    const title = todoInput.value.trim();
+    const category = categoryInput.value.trim();
+    const priority = priorityInput.value;
+    const status = statusInput.value;
+    const startDate = startDateInput.value;
+    const endDate = endDateInput.value;
 
-    const title = document.getElementById("todoInput").value.trim();
-
-    const category = document.getElementById("category").value.trim();
-
-    const priority = document.getElementById("priority").value;
-
-    const status = document.getElementById("status").value;
-
-    const startDate = document.getElementById("startDate").value;
-
-    const endDate = document.getElementById("endDate").value;
-
-    if (
-        title === "" ||
-        category === "" ||
-        priority === "" ||
-        status === "" ||
-        startDate === "" ||
-        endDate === ""
-    ) {
-
-        alert("Please fill all fields.");
-
+    if (!title) {
+        alert('Please enter a task title.');
         return;
-
     }
 
-    const todo = {
+    if (endDate && startDate && endDate < startDate) {
+        alert('End date cannot be before start date.');
+        return;
+    }
 
-        title,
-        category,
-        priority,
-        status,
-        startDate,
-        endDate
-
-    };
-
-    if (editIndex === -1) {
-
-        todos.push(todo);
-
+    if (editingId) {
+        // ---- UPDATE existing task ----
+        const todo = todos.find(t => t.id === editingId);
+        if (todo) {
+            todo.title = title;
+            todo.category = category;
+            todo.priority = priority;
+            todo.status = status;
+            todo.startDate = startDate;
+            todo.endDate = endDate;
+        }
+        editingId = null;
+        addBtn.textContent = 'Add Task';
     } else {
-
-        todos[editIndex] = todo;
-
-        editIndex = -1;
-
+        // ---- ADD new task ----
+        const newTodo = {
+            id: generateId(),
+            title,
+            category,
+            priority,
+            status,
+            startDate,
+            endDate,
+            createdAt: new Date().toISOString()
+        };
+        todos.push(newTodo);
     }
 
+    saveTodos();
     clearForm();
-
-    displayTodos();
-
+    renderTodos();
 }
 
-// View Task
-function viewTodo(index) {
-
-    const todo = todos[index];
-
-    document.getElementById("todoDetails").innerHTML = `
-        <p><strong>Task:</strong> ${todo.title}</p>
-        <p><strong>Category:</strong> ${todo.category}</p>
-        <p><strong>Priority:</strong> ${todo.priority}</p>
-        <p><strong>Status:</strong> ${todo.status}</p>
-        <p><strong>Start Date:</strong> ${todo.startDate}</p>
-        <p><strong>End Date:</strong> ${todo.endDate}</p>
-    `;
-
-    document.getElementById("modal").style.display = "flex";
-
+// ===============================
+// Clear the input form
+// ===============================
+function clearForm() {
+    todoInput.value = '';
+    categoryInput.value = '';
+    priorityInput.value = '';
+    statusInput.value = '';
+    startDateInput.value = '';
+    endDateInput.value = '';
 }
 
-// Close Modal
-function closeModal() {
+// ===============================
+// Edit a Task (loads data into form)
+// ===============================
+function editTodo(id) {
+    const todo = todos.find(t => t.id === id);
+    if (!todo) return;
 
-    document.getElementById("modal").style.display = "none";
+    todoInput.value = todo.title;
+    categoryInput.value = todo.category;
+    priorityInput.value = todo.priority;
+    statusInput.value = todo.status;
+    startDateInput.value = todo.startDate;
+    endDateInput.value = todo.endDate;
 
+    editingId = id;
+    addBtn.textContent = 'Update Task';
+    todoInput.focus();
 }
 
-// Edit Task
-function editTodo(index) {
+// ===============================
+// Delete a Task
+// ===============================
+function deleteTodo(id) {
+    if (!confirm('Are you sure you want to delete this task?')) return;
 
-    const todo = todos[index];
+    todos = todos.filter(t => t.id !== id);
 
-    document.getElementById("todoInput").value = todo.title;
-
-    document.getElementById("category").value = todo.category;
-
-    document.getElementById("priority").value = todo.priority;
-
-    document.getElementById("status").value = todo.status;
-
-    document.getElementById("startDate").value = todo.startDate;
-
-    document.getElementById("endDate").value = todo.endDate;
-
-    editIndex = index;
-
-}
-
-// Delete Task
-function deleteTodo(index) {
-
-    if (confirm("Delete this task?")) {
-
-        todos.splice(index, 1);
-
-        displayTodos();
-
+    // If we were editing the task that just got deleted, reset the form
+    if (editingId === id) {
+        editingId = null;
+        addBtn.textContent = 'Add Task';
+        clearForm();
     }
 
+    saveTodos();
+    renderTodos();
 }
 
-// Search
-document.getElementById("searchTask").addEventListener("keyup", function () {
+// ===============================
+// Toggle quick complete status
+// ===============================
+function toggleComplete(id) {
+    const todo = todos.find(t => t.id === id);
+    if (!todo) return;
+    todo.status = todo.status === 'Completed' ? 'Pending' : 'Completed';
+    saveTodos();
+    renderTodos();
+}
 
-    const keyword = this.value.toLowerCase();
+// ===============================
+// Show Task Details Modal
+// ===============================
+function viewTodo(id) {
+    const todo = todos.find(t => t.id === id);
+    if (!todo) return;
 
-    const filtered = todos.filter(todo =>
+    todoDetails.innerHTML = `
+        <p><strong>Title:</strong> ${escapeHtml(todo.title)}</p>
+        <p><strong>Category:</strong> ${escapeHtml(todo.category) || '—'}</p>
+        <p><strong>Priority:</strong> ${escapeHtml(todo.priority) || '—'}</p>
+        <p><strong>Status:</strong> ${escapeHtml(todo.status) || '—'}</p>
+        <p><strong>Start Date:</strong> ${todo.startDate || '—'}</p>
+        <p><strong>End Date:</strong> ${todo.endDate || '—'}</p>
+        <p><strong>ID:</strong> ${todo.id}</p>
+    `;
+    modal.style.display = 'flex';
+}
 
-        todo.title.toLowerCase().includes(keyword) ||
+function closeModal() {
+    modal.style.display = 'none';
+}
 
-        todo.category.toLowerCase().includes(keyword)
-
-    );
-
-    displayTodos(filtered);
-
+// Close modal when clicking outside content
+window.addEventListener('click', (e) => {
+    if (e.target === modal) closeModal();
 });
 
-// Statistics
-function updateStats() {
-
-    document.getElementById("totalTasks").textContent = todos.length;
-
-    const pending = todos.filter(todo => todo.status === "Pending").length;
-
-    const completed = todos.filter(todo => todo.status === "Completed").length;
-
-    document.getElementById("pendingTasks").textContent = pending;
-
-    document.getElementById("completedTasks").textContent = completed;
-
+// ===============================
+// Escape HTML to prevent injection
+// ===============================
+function escapeHtml(str) {
+    if (!str) return '';
+    return str
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#039;');
 }
 
-// Clear Form
-function clearForm() {
+// ===============================
+// Render Todos (with search filter)
+// ===============================
+function renderTodos() {
+    const query = searchInput.value.trim().toLowerCase();
 
-    document.getElementById("todoInput").value = "";
+    const filtered = todos.filter(t =>
+        t.title.toLowerCase().includes(query) ||
+        (t.category && t.category.toLowerCase().includes(query))
+    );
 
-    document.getElementById("category").value = "";
+    todoList.innerHTML = '';
 
-    document.getElementById("priority").value = "";
+    if (filtered.length === 0) {
+        todoList.innerHTML = '<li class="empty-state">No tasks found.</li>';
+    } else {
+        filtered.forEach(todo => {
+            const li = document.createElement('li');
+            li.className = 'todo-card';
+            li.dataset.id = todo.id;
 
-    document.getElementById("status").value = "";
+            const priorityClass = (todo.priority || '').toLowerCase();
+            const statusClass = (todo.status || '').toLowerCase().replace(' ', '-');
 
-    document.getElementById("startDate").value = "";
+            li.innerHTML = `
+                <div class="todo-main">
+                    <h3 class="${todo.status === 'Completed' ? 'completed-text' : ''}">
+                        ${escapeHtml(todo.title)}
+                    </h3>
+                    <div class="todo-meta">
+                        ${todo.category ? `<span class="tag category">${escapeHtml(todo.category)}</span>` : ''}
+                        ${todo.priority ? `<span class="tag priority ${priorityClass}">${escapeHtml(todo.priority)}</span>` : ''}
+                        ${todo.status ? `<span class="tag status ${statusClass}">${escapeHtml(todo.status)}</span>` : ''}
+                    </div>
+                    <div class="todo-dates">
+                        ${todo.startDate ? `<span>Start: ${todo.startDate}</span>` : ''}
+                        ${todo.endDate ? `<span>End: ${todo.endDate}</span>` : ''}
+                    </div>
+                </div>
+                <div class="todo-actions">
+                    <button onclick="viewTodo('${todo.id}')">View</button>
+                    <button onclick="toggleComplete('${todo.id}')">
+                        ${todo.status === 'Completed' ? 'Mark Pending' : 'Mark Done'}
+                    </button>
+                    <button onclick="editTodo('${todo.id}')">Edit</button>
+                    <button onclick="deleteTodo('${todo.id}')" class="delete-btn">Delete</button>
+                </div>
+            `;
 
-    document.getElementById("endDate").value = "";
-
-}
-
-// Close Modal Outside Click
-window.onclick = function(event) {
-
-    const modal = document.getElementById("modal");
-
-    if (event.target === modal) {
-
-        closeModal();
-
+            todoList.appendChild(li);
+        });
     }
 
-};
+    updateStats();
+}
 
-// Load Tasks
-displayTodos();
+// ===============================
+// Update Statistics
+// ===============================
+function updateStats() {
+    const total = todos.length;
+    const completed = todos.filter(t => t.status === 'Completed').length;
+    const pending = total - completed;
+
+    totalTasksEl.textContent = total;
+    pendingTasksEl.textContent = pending;
+    completedTasksEl.textContent = completed;
+}
+
+// ===============================
+// Search listener
+// ===============================
+searchInput.addEventListener('input', renderTodos);
+
+// ===============================
+// Initial Render
+// ===============================
+renderTodos();
