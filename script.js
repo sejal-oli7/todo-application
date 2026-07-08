@@ -27,10 +27,23 @@ const modal = document.getElementById('modal');
 const todoDetails = document.getElementById('todoDetails');
 
 // ===============================
-// Utility: generate a unique ID
+// Utility: generate a unique, sequential ID (001, 002, 003, ...)
 // ===============================
 function generateId() {
-    return 'id-' + Date.now() + '-' + Math.floor(Math.random() * 100000);
+    let counter = parseInt(localStorage.getItem('todoIdCounter'), 10);
+
+    if (isNaN(counter)) {
+        // First run: pick up after any existing numeric-style IDs, else start at 0
+        const existingNums = todos
+            .map(t => parseInt(t.id, 10))
+            .filter(n => !isNaN(n));
+        counter = existingNums.length ? Math.max(...existingNums) : 0;
+    }
+
+    counter += 1;
+    localStorage.setItem('todoIdCounter', counter);
+
+    return String(counter).padStart(3, '0');
 }
 
 // ===============================
@@ -61,6 +74,8 @@ function addTodo() {
         return;
     }
 
+    let affectedId;
+
     if (editingId) {
         // ---- UPDATE existing task ----
         const todo = todos.find(t => t.id === editingId);
@@ -72,6 +87,7 @@ function addTodo() {
             todo.startDate = startDate;
             todo.endDate = endDate;
         }
+        affectedId = editingId;
         editingId = null;
         addBtn.textContent = 'Add Task';
     } else {
@@ -87,11 +103,15 @@ function addTodo() {
             createdAt: new Date().toISOString()
         };
         todos.push(newTodo);
+        affectedId = newTodo.id;
     }
 
     saveTodos();
     clearForm();
     renderTodos();
+
+    // Show the task's details right after it's added/updated
+    viewTodo(affectedId);
 }
 
 // ===============================
@@ -140,6 +160,11 @@ function deleteTodo(id) {
         clearForm();
     }
 
+    // Close the modal if it was showing the task we just deleted
+    if (modal.style.display === 'flex') {
+        closeModal();
+    }
+
     saveTodos();
     renderTodos();
 }
@@ -170,6 +195,14 @@ function viewTodo(id) {
         <p><strong>Start Date:</strong> ${todo.startDate || '—'}</p>
         <p><strong>End Date:</strong> ${todo.endDate || '—'}</p>
         <p><strong>ID:</strong> ${todo.id}</p>
+
+        <div class="modal-actions">
+            <button onclick="toggleComplete('${todo.id}'); viewTodo('${todo.id}')">
+                ${todo.status === 'Completed' ? 'Mark Pending' : 'Mark Done'}
+            </button>
+            <button onclick="editTodo('${todo.id}'); closeModal()">Edit</button>
+            <button onclick="deleteTodo('${todo.id}')" class="delete-btn">Delete</button>
+        </div>
     `;
     modal.style.display = 'flex';
 }
