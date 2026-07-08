@@ -1,5 +1,6 @@
-
-   /* Global Styles */
+/* ===========================
+   Global Styles
+=========================== */
 
 *{
     margin:0;
@@ -10,33 +11,33 @@
 
 body{
     background:#eef2f7;
-    padding:40px 20px;
+    padding:clamp(20px,4vw,40px);
     color:#333;
 }
 
 .container{
-    max-width:1100px;
-    width:100%;
+    width:min(95%,1300px);
     margin:0 auto;
     background:#fff;
-    border-radius:16px;
-    padding:30px;
-    box-shadow:0 10px 30px rgba(0,0,0,.08);
+    padding:clamp(20px,3vw,35px);
+    border-radius:18px;
+    box-shadow:0 15px 35px rgba(0,0,0,.08);
 }
 
-
-   /* Heading */
+/* ===========================
+   Heading
+=========================== */
 
 h1{
     text-align:center;
     color:#1f2937;
+    font-size:clamp(1.8rem,3vw,2.5rem);
     margin-bottom:30px;
-    font-size:2rem;
 }
 
-
-   /* Statistics */
-
+/* ===========================
+   Statistics
+=========================== */
 
 .stats{
     display:grid;
@@ -67,8 +68,9 @@ h1{
     font-size:15px;
 }
 
-   /* Search */
-
+/* ===========================
+   Search
+=========================== */
 
 #searchTask{
     width:100%;
@@ -86,8 +88,9 @@ h1{
     box-shadow:0 0 8px rgba(37,99,235,.2);
 }
 
-
-   /* Form */
+/* ===========================
+   Form
+=========================== */
 
 .input-box{
     display:grid;
@@ -129,7 +132,9 @@ h1{
     transform:translateY(-2px);
 }
 
-/* Todo Cards */
+/* ===========================
+   Todo Cards
+=========================== */
 
 ul{
     list-style:none;
@@ -162,7 +167,9 @@ li{
     color:#555;
 }
 
-/* buttons  */
+/* ===========================
+   Buttons
+=========================== */
 
 .btn-group,
 .actions{
@@ -200,7 +207,9 @@ li{
     background:#ef4444;
 }
 
-/* modal  */
+/* ===========================
+   Modal
+=========================== */
 
 .modal{
     display:none;
@@ -213,8 +222,7 @@ li{
 }
 
 .modal-content{
-    width:100%;
-    max-width:500px;
+    width:min(95%,500px);
     background:#fff;
     border-radius:15px;
     padding:30px;
@@ -244,21 +252,11 @@ li{
 
 }
 
-/* responsive */
+/* ===========================
+   Responsive
+=========================== */
 
 @media (max-width:768px){
-
-    body{
-        padding:20px 15px;
-    }
-
-    .container{
-        padding:20px;
-    }
-
-    h1{
-        font-size:1.7rem;
-    }
 
     .stats{
         grid-template-columns:1fr;
@@ -281,10 +279,6 @@ li{
 }
 
 @media (max-width:480px){
-
-    h1{
-        font-size:1.5rem;
-    }
 
     .stat-card h3{
         font-size:30px;
