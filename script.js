@@ -1,9 +1,9 @@
 // Professional Todo Application
 
 
-// ===============================
+
 // Local Storage
-// ===============================
+
 
 let todos = JSON.parse(localStorage.getItem("todos")) || [];
 
@@ -13,9 +13,9 @@ let statusChart;
 let priorityChart;
 
 
-// ===============================
+
 // DOM Elements
-// ===============================
+
 
 
 const todoInput = document.getElementById("todoInput");
@@ -61,9 +61,8 @@ document.getElementById("todoDetails");
 
 
 
-// ===============================
 // Save Data
-// ===============================
+
 
 
 function saveTodos(){
@@ -90,9 +89,9 @@ function generateId(){
 
 
 
-// ===============================
+
 // Add Task
-// ===============================
+
 
 
 function addTodo(){
@@ -193,9 +192,9 @@ function addTodo(){
 
 
 
-// ===============================
+
 // Clear Form
-// ===============================
+
 
 
 function clearForm(){
@@ -216,9 +215,8 @@ function clearForm(){
 
 
 
-// ===============================
 // Display Tasks
-// ===============================
+
 
 
 function renderTodos(){
@@ -377,9 +375,9 @@ function renderTodos(){
 
 
 
-// ===============================
+
 // Edit Task
-// ===============================
+
 
 
 function editTodo(id){
@@ -421,9 +419,9 @@ function editTodo(id){
 
 
 
-// ===============================
+
 // Delete Task
-// ===============================
+
 
 
 function deleteTodo(id){
@@ -447,9 +445,9 @@ function deleteTodo(id){
 
 
 
-// ===============================
+
 // Modal View
-// ===============================
+
 
 
 function viewTodo(id){
@@ -506,9 +504,9 @@ function closeModal(){
 
 
 
-// ===============================
+
 // Dashboard Statistics
-// ===============================
+
 
 
 function updateDashboard(){
@@ -548,9 +546,9 @@ function updateDashboard(){
 
 
 
-// ===============================
+
 // Charts
-// ===============================
+
 
 
 function createCharts(){
@@ -692,9 +690,8 @@ function createCharts(){
 
 
 
-// ===============================
 // Search
-// ===============================
+
 
 
 searchInput.addEventListener(
