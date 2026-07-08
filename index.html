@@ -5,8 +5,7 @@
 
     <meta charset="UTF-8">
 
-    <meta name="viewport"
-        content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <title>Professional Todo Application</title>
 
@@ -18,7 +17,7 @@
 
 <div class="container">
 
-    <h1> Professional Todo Application</h1>
+    <h1>Professional Todo Application</h1>
 
     <!-- Statistics -->
 
@@ -58,7 +57,7 @@
         placeholder="🔍 Search Task..."
     >
 
-    <!-- Form -->
+    <!-- Task Form -->
 
     <div class="input-box">
 
@@ -116,6 +115,28 @@
 
     </div>
 
+    <!-- Dashboard Charts -->
+
+    <div class="charts">
+
+        <div class="chart-card">
+
+            <h2>Task Status</h2>
+
+            <canvas id="statusChart"></canvas>
+
+        </div>
+
+        <div class="chart-card">
+
+            <h2>Priority Distribution</h2>
+
+            <canvas id="priorityChart"></canvas>
+
+        </div>
+
+    </div>
+
     <!-- Todo Cards -->
 
     <ul id="todoList"></ul>
@@ -143,6 +164,12 @@
     </div>
 
 </div>
+
+<!-- Chart.js Library -->
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<!-- JavaScript -->
 
 <script src="script.js"></script>
 

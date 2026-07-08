@@ -295,3 +295,87 @@ li{
     }
 
 }
+
+
+/* Charts */
+
+.charts{
+
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(350px,1fr));
+    gap:25px;
+    margin:30px 0;
+
+}
+
+
+.chart-card{
+
+    background:white;
+    padding:25px;
+    border-radius:15px;
+    box-shadow:0 8px 20px rgba(0,0,0,.08);
+
+}
+
+
+.chart-card h2{
+
+    text-align:center;
+    margin-bottom:20px;
+    color:#1f2937;
+
+}
+
+
+canvas{
+
+    max-height:300px;
+
+}
+
+/* Dashboard Charts */
+
+.charts{
+
+    display:grid;
+
+    grid-template-columns:repeat(auto-fit,minmax(350px,1fr));
+
+    gap:25px;
+
+    margin:35px 0;
+
+}
+
+.chart-card{
+
+    background:#fff;
+
+    padding:20px;
+
+    border-radius:15px;
+
+    box-shadow:0 8px 20px rgba(0,0,0,.08);
+
+}
+
+.chart-card h2{
+
+    text-align:center;
+
+    margin-bottom:20px;
+
+    color:#1f2937;
+
+    font-size:20px;
+
+}
+
+.chart-card canvas{
+
+    width:100% !important;
+
+    max-height:320px;
+
+}
