@@ -61,7 +61,10 @@ document.getElementById("todoDetails");
 
 
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> 7659b2f8c4afb38ee184db87624ef259242c22b8
 // Save Data
 
 
@@ -195,6 +198,10 @@ function addTodo(){
 
 
 // Clear Form
+<<<<<<< HEAD
+=======
+
+>>>>>>> 7659b2f8c4afb38ee184db87624ef259242c22b8
 
 
 function clearForm(){
@@ -215,7 +222,10 @@ function clearForm(){
 
 
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> 7659b2f8c4afb38ee184db87624ef259242c22b8
 // Display Tasks
 
 
@@ -376,6 +386,10 @@ function renderTodos(){
 
 
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> 7659b2f8c4afb38ee184db87624ef259242c22b8
 // Edit Task
 
 
@@ -421,6 +435,10 @@ function editTodo(id){
 
 
 // Delete Task
+<<<<<<< HEAD
+=======
+
+>>>>>>> 7659b2f8c4afb38ee184db87624ef259242c22b8
 
 
 function deleteTodo(id){
@@ -443,6 +461,11 @@ function deleteTodo(id){
 
 
 
+<<<<<<< HEAD
+=======
+
+
+>>>>>>> 7659b2f8c4afb38ee184db87624ef259242c22b8
 // Modal View
 
 
@@ -545,6 +568,10 @@ function updateDashboard(){
 
 
 // Charts
+<<<<<<< HEAD
+=======
+
+>>>>>>> 7659b2f8c4afb38ee184db87624ef259242c22b8
 
 
 function createCharts(){
@@ -686,7 +713,10 @@ function createCharts(){
 
 
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> 7659b2f8c4afb38ee184db87624ef259242c22b8
 // Search
 
 

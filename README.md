@@ -19,9 +19,6 @@ A responsive Todo Application built using HTML, CSS, and JavaScript.
 - CSS3
 - JavaScript (ES6)
 
-## Screenshot
-
-(Add a screenshot here)
 
 ## How to Run
 
